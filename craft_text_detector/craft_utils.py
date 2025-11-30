@@ -63,17 +63,16 @@ def load_craftnet_model(
 
         file_utils.download(url=url, save_path=weight_path)
 
-    # arange device
-    if cuda:
-        craft_net.load_state_dict(copyStateDict(torch_utils.load(weight_path)))
+    # load weights (always load to CPU first, then move to device)
+    craft_net.load_state_dict(
+        copyStateDict(torch_utils.load(weight_path, map_location="cpu"))
+    )
 
+    if cuda:
         craft_net = craft_net.cuda()
         craft_net = torch_utils.DataParallel(craft_net)
         torch_utils.cudnn_benchmark = False
-    else:
-        craft_net.load_state_dict(
-            copyStateDict(torch_utils.load(weight_path, map_location="cpu"))
-        )
+
     craft_net.eval()
     return craft_net
 
@@ -107,17 +106,16 @@ def load_refinenet_model(
 
         file_utils.download(url=url, save_path=weight_path)
 
-    # arange device
-    if cuda:
-        refine_net.load_state_dict(copyStateDict(torch_utils.load(weight_path)))
+    # load weights (always load to CPU first, then move to device)
+    refine_net.load_state_dict(
+        copyStateDict(torch_utils.load(weight_path, map_location="cpu"))
+    )
 
+    if cuda:
         refine_net = refine_net.cuda()
         refine_net = torch_utils.DataParallel(refine_net)
         torch_utils.cudnn_benchmark = False
-    else:
-        refine_net.load_state_dict(
-            copyStateDict(torch_utils.load(weight_path, map_location="cpu"))
-        )
+
     refine_net.eval()
     return refine_net
 
