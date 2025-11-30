@@ -57,7 +57,7 @@ def get_prediction(
     # preprocessing
     x = image_utils.normalizeMeanVariance(img_resized)
     x = torch_utils.from_numpy(x).permute(2, 0, 1)  # [h, w, c] to [c, h, w]
-    x = torch_utils.Variable(x.unsqueeze(0))  # [c, h, w] to [b, c, h, w]
+    x = x.unsqueeze(0)  # [c, h, w] to [b, c, h, w]
     if cuda:
         x = x.cuda()
     preprocessing_time = time.time() - t0
